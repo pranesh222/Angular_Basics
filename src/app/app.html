@@ -1,0 +1,376 @@
+<router-outlet></router-outlet>
+
+  <a routerLink="/forms" routerLinkActive="active">Reactive Forms</a> <br> <br>
+  <a routerLink="/rxjs" routerLinkActive="active">RxJS</a> <br><br>
+  <a routerLink="/ngrx" routerLinkActive="active">NgRx</a> <br><br>
+  <a routerLink="/performance" routerLinkActive="active">Performance</a>
+
+
+<app-structural-directives>
+  <h1 #nameref>content via selectors</h1>
+  <h2 #nameref2>Doe</h2>
+  <h1 #semantic>Content via semantic selectors</h1>
+</app-structural-directives>
+<div class="app-container">
+
+  <!-- ── HEADER ───────────────────────────────────────────────── -->
+  <div class="app-header">
+    <h1>🅰 Angular Concepts Explorer</h1>
+    <p>Interactive learning — Day 2</p>
+  </div>
+
+  <!-- ── TABS ─────────────────────────────────────────────────── -->
+  <div class="tab-bar">
+    <button
+      *ngFor="let tab of tabs"
+      class="tab-btn"
+      [class.active]="activeTab === tab.id"
+      (click)="setTab(tab.id)">
+      {{ tab.label }}
+    </button>
+  </div>
+
+  <!-- ── TAB CONTENT ───────────────────────────────────────────── -->
+  <div class="tab-content">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TAB 1 — DATA BINDING
+         ═══════════════════════════════════════════════════════ -->
+    <div *ngIf="activeTab === 'binding'">
+
+      <h2>Data Binding</h2>
+
+      <!-- 1. Interpolation -->
+      <div class="card">
+        <div class="card-title">1. Interpolation {{ '{{' }} {{ '}}' }}</div>
+        <p>Name: <strong>{{ name }}</strong></p>
+        <p>Role: <strong>{{ role }}</strong></p>
+        <p>Expression: <strong>{{ name.toUpperCase() }}</strong></p>
+      </div>
+
+      <!-- 2. Property Binding -->
+      <div class="card">
+        <div class="card-title">2. Property Binding [ ]</div>
+        <img [src]="imageUrl" [alt]="name" class="avatar" />
+        <p><button [disabled]="isDisabled">Disabled Button</button>
+          <button (click)="isDisabled = !isDisabled" class="ml">
+            Toggle Disabled
+          </button>
+        </p>
+    
+          <strong>Attribute binding:</strong>
+          <table border="1" style="margin-top:8px">
+            <tbody>
+              <tr>
+                <td [attr.colspan]="2" style="text-align:center">
+                colspan via [attr.colspan]
+              </td>
+            </tr>
+              <tr>
+                <td>
+                  A
+                </td>
+                <td>
+                  B
+                </td>
+              </tr>
+            </tbody>
+          </table>
+  
+      </div>
+
+      <!-- 3. Event Binding -->
+      <div class="card">
+        <div class="card-title">3. Event Binding ( )</div>
+        <button (click)="onButtonClick()">Click Me</button>
+        <span class="ml">Clicked: {{ clickCount }} times</span>
+        <p>
+          <input (keyup)="onKeyUp($event)" placeholder="Press any key" />
+          <span class="ml">Last key: <strong>{{ lastKey || '—' }}</strong></span>
+        </p>
+        <p>
+          <input (input)="onInputChange($event)" placeholder="Type here" />
+          <span class="ml">Value: <strong>{{ inputValue || '—' }}</strong></span>
+        </p>
+        <p>
+          <input (keyup.enter)="onButtonClick()" placeholder="Press Enter to count" />
+        </p>
+      </div>
+
+      <!-- 4. Two-way Binding -->
+      <div class="card">
+        <div class="card-title">4. Two-Way Binding [( )]</div>
+        <input [(ngModel)]="searchText" placeholder="Type something..." />
+        <p>You typed: <strong>{{ searchText || '—' }}</strong></p>
+        <p class="note">
+          [(ngModel)] = [ngModel]="searchText" + (ngModelChange)="searchText=$event"
+        </p>
+      </div>
+
+      <!-- 5. Template Reference Variables -->
+      <div class="card">
+        <div class="card-title">5. Template Reference Variables #ref</div>
+        <input #nameInput placeholder="Enter your name" />
+        <button (click)="greetUser(nameInput.value)" class="ml">Greet</button>
+        <p>Live value: <strong>{{ nameInput.value }}</strong></p>
+        <p class="note">#nameInput points to the DOM element — no TypeScript needed</p>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TAB 2 — STRUCTURAL DIRECTIVES
+         ═══════════════════════════════════════════════════════ -->
+    <div *ngIf="activeTab === 'structural'">
+
+      <h2>Structural Directives</h2>
+
+      <!-- ngIf -->
+      <div class="card">
+        <div class="card-title">1. *ngIf</div>
+        <button (click)="toggleLogin()">Toggle Login</button>
+        <p *ngIf="isLoggedIn" class="badge success">✅ Welcome, {{ name }}!</p>
+        <p *ngIf="!isLoggedIn" class="badge error">❌ Please log in</p>
+
+        <div class="mt">
+          <strong>ngIf with else:</strong>
+          <p *ngIf="isLoggedIn; else loggedOut">You are logged in.</p>
+          <ng-template #loggedOut><p>You are logged out.</p></ng-template>
+        </div>
+
+        <p class="note">
+          *ngIf removes element from DOM entirely (unlike [hidden] which uses display:none)
+        </p>
+      </div>
+
+      <!-- ngFor -->
+      <div class="card">
+        <div class="card-title">2. *ngFor</div>
+
+        <strong>Skills:</strong>
+        <ul>
+          <li *ngFor="let skill of skills; let i = index">
+            {{ i + 1 }}. {{ skill }}
+            <button (click)="removeSkill(i)">✕</button>
+          </li>
+        </ul>
+
+        <strong>Products (with exported values):</strong>
+        <ul>
+          <li *ngFor="let p of products;
+                      let i = index;
+                      let isFirst = first;
+                      let isLast = last;
+                      let isEven = even;
+                      trackBy: trackByProductId"
+              [class.even-row]="isEven">
+            <strong>{{ p.name }}</strong> — ${{ p.price }}
+            <span *ngIf="!p.inStock" class="badge error"> Out of stock</span>
+            <span *ngIf="isFirst" class="badge success"> First</span>
+            <span *ngIf="isLast" class="badge warning"> Last</span>
+          </li>
+        </ul>
+        <p class="note">trackBy: trackByProductId prevents full DOM re-render on array changes</p>
+      </div>
+
+      <!-- ngSwitch -->
+      <div class="card">
+        <div class="card-title">3. *ngSwitch</div>
+        <div class="mb">
+          <button (click)="currentRole = 'admin'">Admin</button>
+          <button (click)="currentRole = 'editor'" class="ml">Editor</button>
+          <button (click)="currentRole = 'viewer'" class="ml">Viewer</button>
+          <button (click)="currentRole = 'guest'"  class="ml">Guest</button>
+        </div>
+        <div [ngSwitch]="currentRole">
+          <p *ngSwitchCase="'admin'"  class="badge success">🔑 Admin — full access</p>
+          <p *ngSwitchCase="'editor'" class="badge warning">✏️ Editor — edit access</p>
+          <p *ngSwitchCase="'viewer'" class="badge">👁️ Viewer — read only</p>
+          <p *ngSwitchDefault         class="badge error">❓ Unknown role</p>
+        </div>
+      </div>
+
+      <!-- ng-container -->
+      <div class="card">
+        <div class="card-title">4. ng-container — no extra DOM element</div>
+        <strong>In-stock products only:</strong>
+        <ul>
+          <ng-container *ngFor="let p of products">
+            <li *ngIf="p.inStock">✅ {{ p.name }}</li>
+          </ng-container>
+        </ul>
+        <p class="note">
+          ng-container lets you use two structural directives together
+          without adding a wrapper div to the DOM
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TAB 3 — ATTRIBUTE DIRECTIVES
+         ═══════════════════════════════════════════════════════ -->
+    <div *ngIf="activeTab === 'attribute'">
+
+      <h2>Attribute Directives</h2>
+
+      <!-- ngClass -->
+      <div class="card">
+        <div class="card-title">1. ngClass</div>
+
+        <strong>String syntax:</strong>
+        <p [ngClass]="'alert alert-' + alertType">
+          Alert: {{ alertType }}
+        </p>
+        <button (click)="alertType = 'success'">Success</button>
+        <button (click)="alertType = 'warning'" class="ml">Warning</button>
+        <button (click)="alertType = 'error'"   class="ml">Error</button>
+
+        <div class="mt">
+          <strong>Object syntax:</strong>
+          <button (click)="toggleActive()">Toggle Active</button>
+          <div class="mt" [ngClass]="{
+            'active-box': isActive,
+            'inactive-box': !isActive,
+            'admin-badge': isAdmin
+          }">
+            {{ isActive ? 'Active' : 'Inactive' }}
+            {{ isAdmin ? '(Admin)' : '' }}
+          </div>
+        </div>
+
+        <div class="mt">
+          <strong>Array syntax:</strong>
+          <div [ngClass]="['alert', 'alert-' + alertType]">
+            Array-based ngClass
+          </div>
+        </div>
+      </div>
+
+      <!-- ngStyle -->
+      <div class="card">
+        <div class="card-title">2. ngStyle</div>
+        <div class="controls">
+          <label>Font size: {{ fontSize }}px
+            <input type="range" min="12" max="32" [(ngModel)]="fontSize" />
+          </label>
+          <label class="ml">Color:
+            <input type="color" [(ngModel)]="textColor" />
+          </label>
+          <label class="ml">
+            <input type="checkbox" [(ngModel)]="isBold" /> Bold
+          </label>
+        </div>
+        <p [ngStyle]="{
+          'font-size': fontSize + 'px',
+          'color': textColor,
+          'font-weight': isBold ? 'bold' : 'normal'
+        }">
+          This text style is fully dynamic!
+        </p>
+        <p class="note">Use ngStyle only for truly dynamic values. Prefer ngClass + CSS otherwise.</p>
+      </div>
+
+      <!-- Real world -->
+      <div class="card">
+        <div class="card-title">3. Real-world: Notification List</div>
+        <div *ngFor="let n of notifications">
+          <div [ngClass]="['notification', n.type, n.read ? 'read' : 'unread']">
+            {{ n.message }}
+            <button *ngIf="!n.read" (click)="markAsRead(n.id)">Mark read</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TAB 4 — PIPES
+         ═══════════════════════════════════════════════════════ -->
+    <div *ngIf="activeTab === 'pipes'">
+
+      <h2>Built-in Pipes</h2>
+
+      <div class="card">
+        <div class="card-title">Date Pipe</div>
+        <p>Default:     <strong>{{ pipeDate | date }}</strong></p>
+        <p>Short:       <strong>{{ pipeDate | date:'shortDate' }}</strong></p>
+        <p>Full:        <strong>{{ pipeDate | date:'fullDate' }}</strong></p>
+        <p>Custom:      <strong>{{ pipeDate | date:'dd-MM-yyyy' }}</strong></p>
+        <p>With time:   <strong>{{ pipeDate | date:'medium' }}</strong></p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Currency & Number Pipe</div>
+        <p>Currency:    <strong>{{ pipeAmount | currency }}</strong></p>
+        <p>INR:         <strong>{{ pipeAmount | currency:'INR':'symbol' }}</strong></p>
+        <p>Number:      <strong>{{ pipeRating | number:'1.2-2' }}</strong></p>
+        <p>Percent:     <strong>{{ 0.857 | percent }}</strong></p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">String & JSON Pipes</div>
+        <p>Uppercase:   <strong>{{ pipeText | uppercase }}</strong></p>
+        <p>Lowercase:   <strong>{{ pipeText | lowercase }}</strong></p>
+        <p>Titlecase:   <strong>{{ pipeText | titlecase }}</strong></p>
+        <p>Slice:       <strong>{{ pipeText | slice:0:14 }}</strong></p>
+        <p>JSON: {{ tabs | json }}</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Chaining Pipes</div>
+        <p>
+          {{ pipeText | slice:0:14 | uppercase }}
+        </p>
+        <p class="note">
+          Pipes can be chained — output of left pipe becomes input of right pipe
+        </p>
+      </div>
+
+    </div>
+
+   <!-- Services & Dependency Injection tab content is omitted for brevity, but it follows the same pattern as above with *ngIf to conditionally show content based on activeTab. -->
+  <div class="servicesTab" *ngIf="activeTab === 'services'">
+      <h2>Services & Dependency Injection</h2>
+
+      <app-services-and-di></app-services-and-di>
+
+      <!-- More content on services and DI can be added here -->
+
+
+
+  </div>
+
+  <div class="servicesTab" *ngIf="activeTab === 'router'">
+      <h2>Router</h2>
+
+      <app-router-demo></app-router-demo>
+
+      <!-- More content on services and DI can be added here -->
+
+
+
+  </div>
+
+    <div class="servicesTab" *ngIf="activeTab === 'http'">
+      <h2>HTTP</h2>
+
+      <app-http-demo [rowTemplate]="rowTpl"></app-http-demo>
+
+      <!-- More content on services and DI can be added here -->
+
+
+
+  </div>
+ <ng-template #rowTpl let-item>
+  <div>{{ item.name }}</div>
+</ng-template>
+
+
+
+</div>
+
+
+</div>
+
+

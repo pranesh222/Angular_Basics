@@ -1,0 +1,97 @@
+<div class="http-container">
+  <h2>🌐 HTTP Client Demo</h2>
+
+  <!-- Status messages -->
+  <div *ngIf="isLoading()" class="badge warning">⏳ Loading...</div>
+  <div *ngIf="errorMsg()"  class="badge error">❌ {{ errorMsg() }}</div>
+  <div *ngIf="successMsg()" class="badge success">✅ {{ successMsg() }}</div>
+
+  <!-- ── GET all ──────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-title">GET /posts — Fetch All</div>
+    <button (click)="loadPosts()">Load Posts</button>
+    <p class="note">GET https://jsonplaceholder.typicode.com/posts</p>
+  </div>
+
+  <!-- ── GET by id ────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-title">GET /posts/:id — Fetch by ID</div>
+    <div class="form-row">
+      <button (click)="loadPostById(1)">Get Post 1</button>
+      <button (click)="loadPostById(5)" class="ml">Get Post 5</button>
+      <button (click)="loadPostById(999)" class="ml">Get Post 999 (404)</button>
+    </div>
+    <div *ngIf="selectedPost()" class="mt">
+      <strong>{{ selectedPost()!.title }}</strong>
+      <p>{{ selectedPost()!.body }}</p>
+    </div>
+    <p class="note">GET /posts/999 triggers 404 → catchError handles it</p>
+  </div>
+
+  <!-- ── GET with query params ────────────────────────────────── -->
+  <div class="card">
+    <div class="card-title">GET /posts?userId=n — Query Params</div>
+    <div class="form-row">
+      <label>User ID:
+        <input type="number" [(ngModel)]="filterUserId"
+               min="1" max="10" style="width:60px" />
+      </label>
+      <button (click)="loadByUser()" class="ml">Filter by User</button>
+    </div>
+    <p class="note">HttpParams builds ?userId={{ filterUserId }} automatically</p>
+  </div>
+
+  <!-- ── POST ─────────────────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-title">POST /posts — Create</div>
+    <div class="form-row" style="flex-direction:column; gap:8px">
+      <input [(ngModel)]="newPost.title" placeholder="Post title" />
+      <input [(ngModel)]="newPost.body"  placeholder="Post body" />
+      <button (click)="createPost()"
+              [disabled]="!newPost.title || !newPost.body">
+        Create Post
+      </button>
+    </div>
+    <p class="note">JSONPlaceholder returns id: 101 for all created posts (fake API)</p>
+  </div>
+
+  <!-- ── Posts List — PUT & DELETE ────────────────────────────── -->
+  <div class="card">
+    <div class="card-title">Posts List — PUT & DELETE</div>
+
+    <div *ngIf="posts().length === 0" class="note">
+      Click "Load Posts" above to fetch data first.
+    </div>
+
+    <div *ngFor="let post of posts(); trackBy: trackById"
+         class="post-row">
+      <div class="post-info">
+        <span class="post-id">#{{ post.id }}</span>
+        <span class="post-title">{{ post.title | titlecase | slice:0:40 }}...</span>
+        <span class="user-tag">User {{ post.userId }}</span>
+      </div>
+      <div class="post-actions">
+        <button (click)="updatePost(post)">PUT</button>
+        <button class="danger ml" (click)="deletePost(post.id)">DELETE</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+  <div class="card-title">🔁 Retry Interceptor Test</div>
+  <button (click)="testRetry()">Trigger Retry (bad URL)</button>
+  <p class="note">
+    Watch console — interceptor retries 3 times with 1s, 2s, 3s delays
+  </p>
+</div>
+
+<button (click)="testPublicUrl()">Test Public URL (no token)</button>
+
+<!-- <ng-container *ngFor="let item of data">
+  <ng-container 
+    *ngTemplateOutlet="rowTemplate; context: {$implicit: item}">
+  </ng-container>
+</ng-container> -->
+
+
+</div>

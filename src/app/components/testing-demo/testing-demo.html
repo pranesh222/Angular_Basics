@@ -1,0 +1,51 @@
+<div class="testing-container">
+  <h2>🧪 Calculator — Unit Testing Demo</h2>
+
+  <div class="card">
+    <div class="card-title">Calculator</div>
+
+    <div class="calc-inputs">
+      <input type="number" [ngModel]="a()"
+             (ngModelChange)="a.set(+$event)"
+             placeholder="A" />
+      <span class="operator">⊕</span>
+      <input type="number" [ngModel]="b()"
+             (ngModelChange)="b.set(+$event)"
+             placeholder="B" />
+    </div>
+
+    <div class="calc-buttons">
+      <button (click)="calculate('add')">Add</button>
+      <button (click)="calculate('subtract')" class="ml">Subtract</button>
+      <button (click)="calculate('multiply')" class="ml">Multiply</button>
+      <button (click)="calculate('divide')"   class="ml">Divide</button>
+    </div>
+
+    <div *ngIf="result() !== null" class="result">
+      Result: <strong>{{ result() }}</strong>
+    </div>
+    <div *ngIf="error()" class="badge error mt">❌ {{ error() }}</div>
+  </div>
+
+  <div class="card" *ngIf="history().length > 0">
+    <div class="card-title">
+      History
+      <button (click)="clearHistory()" class="ml">Clear</button>
+    </div>
+    <div *ngFor="let h of history()" class="history-row">
+      {{ h.a }} {{ h.operation }} {{ h.b }} = <strong>{{ h.result }}</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧪 Run the Tests</div>
+    <p>Open a terminal and run:</p>
+    <pre>ng test</pre>
+    <p>This opens Karma test runner in the browser showing all test results.</p>
+    <p class="note">
+      Check <strong>calculator.spec.ts</strong> — it covers:
+      pure methods, error throwing, history tracking,
+      HTTP mocking with HttpTestingController.
+    </p>
+  </div>
+</div>

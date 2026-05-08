@@ -1,0 +1,129 @@
+<div class="ngrx-container">
+  <h2>🏪 NgRx Store Demo</h2>
+
+  <!-- ── COUNTER — simple store ──────────────────────────────── -->
+  <div class="card">
+    <div class="card-title">Counter Store — Actions & Selectors</div>
+
+    <div class="counter-display"
+         [class.positive]="isPositive$ | async"
+         [class.negative]="isNegative$ | async">
+      {{ count$ | async }}
+    </div>
+
+    <div class="counter-actions">
+      <button (click)="decrement()">−</button>
+      <button (click)="reset()">Reset</button>
+      <button (click)="increment()">+</button>
+    </div>
+
+    <div class="form-row mt">
+      <input type="number" [(ngModel)]="incrementAmount" style="width:80px" />
+      <button (click)="incrementBy()" class="ml">
+        Increment by {{ incrementAmount }}
+      </button>
+    </div>
+
+    <div class="derived mt">
+      <span class="badge">Doubled: {{ doubled$ | async }}</span>
+      <span class="badge ml">
+        {{ (isPositive$ | async) ? '📈 Positive' :
+           (isNegative$ | async) ? '📉 Negative' : '➖ Zero' }}
+      </span>
+    </div>
+
+    <p class="note">
+      Open Redux DevTools (F12 → Redux tab) to see every dispatched
+      action and state change with time-travel debugging!
+    </p>
+  </div>
+
+  <!-- ── POSTS — store with effects ──────────────────────────── -->
+  <div class="card">
+    <div class="card-title">
+      Posts Store — Effects (HTTP) · Count: {{ postCount$ | async }}
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="loading$ | async" class="badge warning">⏳ Loading...</div>
+
+    <!-- Error state -->
+    <div *ngIf="error$ | async as error" class="badge error">
+      ❌ {{ error }}
+    </div>
+
+    <!-- Add post form -->
+    <div class="add-form">
+      <input [(ngModel)]="newPostTitle" placeholder="Post title" />
+      <input [(ngModel)]="newPostBody"  placeholder="Post body" class="ml" />
+      <button (click)="addPost()" class="ml"
+              [disabled]="!newPostTitle || !newPostBody">
+        Add Post
+      </button>
+    </div>
+
+    <!-- Actions -->
+    <div class="mb">
+      <button (click)="reloadPosts()">🔄 Reload Posts</button>
+    </div>
+
+    <!-- Posts list -->
+    <div *ngFor="let post of posts$ | async; trackBy: trackById"
+         class="post-row">
+      <div class="post-info">
+        <span class="post-id">#{{ post.id }}</span>
+        <span class="post-title">{{ post.title | slice:0:50 }}...</span>
+      </div>
+      <button class="danger" (click)="deletePost(post.id)">Delete</button>
+    </div>
+
+    <p class="note">
+      NgRx flow: dispatch(loadPosts()) → Effect makes HTTP call
+      → dispatches loadPostsSuccess → Reducer updates state
+      → Selector emits new posts$ → async pipe updates template
+    </p>
+  </div>
+
+  <!-- ── DATA FLOW DIAGRAM ─────────────────────────────────────── -->
+  <div class="card">
+    <div class="card-title">NgRx Unidirectional Data Flow</div>
+    <div class="flow-diagram">
+      <div class="flow-step">
+        <div class="step-icon">🖱️</div>
+        <div class="step-label">Component</div>
+        <div class="step-desc">dispatch(action)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">⚡</div>
+        <div class="step-label">Effect</div>
+        <div class="step-desc">HTTP side effects</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">⚙️</div>
+        <div class="step-label">Reducer</div>
+        <div class="step-desc">pure fn → new state</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">🏪</div>
+        <div class="step-label">Store</div>
+        <div class="step-desc">holds state</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">🔍</div>
+        <div class="step-label">Selector</div>
+        <div class="step-desc">extract slice</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="step-icon">🖥️</div>
+        <div class="step-label">Component</div>
+        <div class="step-desc">async pipe updates</div>
+      </div>
+    </div>
+  </div>
+
+</div>

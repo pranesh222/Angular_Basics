@@ -1,0 +1,21 @@
+  .even-row { background: #f0f7ff; }
+pre { background: #f4f4f4; padding: 8px; border-radius: 4px; font-size: 12px; margin-top: 6px; }
+
+
+// services
+.stats { display: flex; gap: 16px; margin-top: 8px;
+  span { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 13px; } }
+
+.product-row { display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid #eee;
+  &:last-child { border-bottom: none; } }
+
+.product-actions { display: flex; align-items: center; gap: 10px; }
+
+.category-tag { background: #EBF3FB; color: #2E75B6; font-size: 11px;
+  padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+
+.form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  input, select { padding: 8px; border: 1px solid #dce3ed; border-radius: 4px; font-size: 13px; } }
+
+button.danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }

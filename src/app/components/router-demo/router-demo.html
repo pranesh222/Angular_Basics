@@ -1,0 +1,22 @@
+<div class="app-container">
+
+  <!-- Navigation -->
+  <nav class="nav-bar">
+    <a routerLink="/"           routerLinkActive="active"
+       [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a routerLink="/product/1"  routerLinkActive="active">Product</a>
+    <a routerLink="/products"   routerLinkActive="active">Products</a>
+    <a routerLink="/settings"   routerLinkActive="active">Settings</a>
+    <a routerLink="/dashboard"  routerLinkActive="active">Dashboard 🔒</a>
+    <a routerLink="/xyz"        routerLinkActive="active">404 Demo</a>
+
+    <!-- Auth toggle for guard demo -->
+    <button (click)="toggleAuth()" class="ml">
+      {{ authState ? '🔓 Logout' : '🔐 Login' }}
+    </button>
+  </nav>
+
+  <!-- All routed content renders here -->
+  <router-outlet></router-outlet>
+
+</div>

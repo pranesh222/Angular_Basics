@@ -1,0 +1,250 @@
+<div class="forms-container">
+  <h2>📋 Reactive Forms — Complete Demo</h2>
+
+  <!-- ════════════════════════════════════════════════════════════
+       FORM 1 — Basic Reactive Form with Async Validator
+       ════════════════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-title">Form 1 — Basic Reactive Form + Async Validator</div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+
+      <!-- First Name -->
+      <div class="field">
+        <label>First Name *</label>
+        <input formControlName="firstName" placeholder="First name" />
+        <div class="errors" *ngIf="isInvalid(profileForm, 'firstName')">
+          <span *ngIf="getError(profileForm, 'firstName', 'required')">
+            Required
+          </span>
+          <span *ngIf="getError(profileForm, 'firstName', 'minlength')">
+            Min 2 characters
+          </span>
+        </div>
+      </div>
+
+      <!-- Last Name -->
+      <div class="field">
+        <label>Last Name *</label>
+        <input formControlName="lastName" placeholder="Last name" />
+        <div class="errors" *ngIf="isInvalid(profileForm, 'lastName')">
+          <span *ngIf="getError(profileForm, 'lastName', 'required')">Required</span>
+          <span *ngIf="getError(profileForm, 'lastName', 'minlength')">Min 2 characters</span>
+        </div>
+      </div>
+
+      <!-- Email — async validator -->
+      <div class="field">
+        <label>Email *</label>
+        <input formControlName="email" type="email" placeholder="Email" />
+        <!-- Async pending state -->
+        <span *ngIf="profileForm.get('email')?.pending" class="badge warning">
+          ⏳ Checking...
+        </span>
+        <div class="errors" *ngIf="isInvalid(profileForm, 'email')">
+          <span *ngIf="getError(profileForm, 'email', 'required')">Required</span>
+          <span *ngIf="getError(profileForm, 'email', 'email')">Invalid email format</span>
+          <span *ngIf="getError(profileForm, 'email', 'emailTaken')">
+            ❌ Email already registered (try: taken@test.com)
+          </span>
+        </div>
+      </div>
+
+      <!-- Age -->
+      <div class="field">
+        <label>Age *</label>
+        <input formControlName="age" type="number" placeholder="Age" />
+        <div class="errors" *ngIf="isInvalid(profileForm, 'age')">
+          <span *ngIf="getError(profileForm, 'age', 'required')">Required</span>
+          <span *ngIf="getError(profileForm, 'age', 'min')">Must be 18 or older</span>
+          <span *ngIf="getError(profileForm, 'age', 'max')">Must be 100 or younger</span>
+        </div>
+      </div>
+
+      <!-- Role -->
+      <div class="field">
+        <label>Role *</label>
+        <select formControlName="role">
+          <option value="developer">Developer</option>
+          <option value="designer">Designer</option>
+          <option value="manager">Manager</option>
+        </select>
+      </div>
+
+      <!-- Form status -->
+      <div class="form-status">
+        <span [class]="profileForm.valid ? 'badge success' : 'badge error'">
+          Form: {{ profileForm.valid ? 'Valid ✅' : 'Invalid ❌' }}
+        </span>
+        <span class="badge ml">Status: {{ profileForm.status }}</span>
+      </div>
+
+      <button type="submit" [disabled]="profileForm.pending">
+        {{ profileForm.pending ? '⏳ Validating...' : 'Submit Profile' }}
+      </button>
+
+      <!-- Submitted data -->
+      <pre *ngIf="profileSubmitted && profileForm.valid">
+{{ submittedData | json }}
+      </pre>
+    </form>
+
+    <p class="note">
+      Try email: taken@test.com → async validator fires after 500ms debounce
+    </p>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       FORM 2 — Custom Validators
+       ════════════════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-title">Form 2 — Custom Sync Validators + Cross-field Validation</div>
+
+    <form [formGroup]="registrationForm" (ngSubmit)="submitRegistration()">
+
+      <!-- Username -->
+      <div class="field">
+        <label>Username *</label>
+        <input formControlName="username" placeholder="Letters, numbers, underscore only" />
+        <div class="errors" *ngIf="isInvalid(registrationForm, 'username')">
+          <span *ngIf="getError(registrationForm, 'username', 'required')">Required</span>
+          <span *ngIf="getError(registrationForm, 'username', 'minlength')">Min 3 chars</span>
+          <span *ngIf="getError(registrationForm, 'username', 'pattern')">
+            Only letters, numbers and underscore allowed
+          </span>
+        </div>
+      </div>
+
+      <!-- Password with strength indicator -->
+      <div class="field">
+        <label>Password *</label>
+        <input formControlName="password" type="password"
+               placeholder="Must be strong" />
+
+        <!-- Strength indicator -->
+        <div class="strength-grid" *ngIf="registrationForm.get('password')?.value">
+          <span [class]="passwordStrength?.hasUpper === false ? 'req fail' : 'req pass'">
+            {{ passwordStrength?.hasUpper === false ? '❌' : '✅' }} Uppercase
+          </span>
+          <span [class]="passwordStrength?.hasLower === false ? 'req fail' : 'req pass'">
+            {{ passwordStrength?.hasLower === false ? '❌' : '✅' }} Lowercase
+          </span>
+          <span [class]="passwordStrength?.hasNumber === false ? 'req fail' : 'req pass'">
+            {{ passwordStrength?.hasNumber === false ? '❌' : '✅' }} Number
+          </span>
+          <span [class]="passwordStrength?.hasSpecial === false ? 'req fail' : 'req pass'">
+            {{ passwordStrength?.hasSpecial === false ? '❌' : '✅' }} Special (!@#$)
+          </span>
+        </div>
+
+        <div class="errors" *ngIf="isInvalid(registrationForm, 'password')">
+          <span *ngIf="getError(registrationForm, 'password', 'required')">Required</span>
+          <span *ngIf="getError(registrationForm, 'password', 'minlength')">Min 8 chars</span>
+        </div>
+      </div>
+
+      <!-- Confirm Password — cross-field error on GROUP -->
+      <div class="field">
+        <label>Confirm Password *</label>
+        <input formControlName="confirmPassword" type="password"
+               placeholder="Repeat password" />
+        <!-- Cross-field error is on the GROUP not the control -->
+        <div class="errors"
+             *ngIf="registrationForm.errors?.['passwordsMismatch']
+                 && registrationForm.get('confirmPassword')?.touched">
+          ❌ Passwords do not match
+        </div>
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p class="note">
+      strongPassword is a custom sync validator. passwordsMatch is a
+      cross-field validator applied to the FormGroup — error lives on
+      the group, not individual controls.
+    </p>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════
+       FORM 3 — Dynamic FormArray
+       ════════════════════════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-title">Form 3 — Dynamic FormArray</div>
+
+    <form [formGroup]="skillsForm" (ngSubmit)="submitSkills()">
+
+      <!-- Developer name -->
+      <div class="field">
+        <label>Developer Name *</label>
+        <input formControlName="developerName" placeholder="Your name" />
+      </div>
+
+      <!-- Skills array -->
+      <div formArrayName="skills">
+        <div *ngFor="let skill of skillGroups; let i = index"
+             [formGroupName]="i"
+             class="skill-row">
+
+          <div class="skill-header">
+            <strong>Skill {{ i + 1 }}</strong>
+            <button type="button" class="danger"
+                    (click)="removeSkill(i)"
+                    [disabled]="skillsArray.length === 1">
+              Remove
+            </button>
+          </div>
+
+          <div class="skill-fields">
+            <div class="field">
+              <label>Skill Name *</label>
+              <input formControlName="name" placeholder="e.g. Angular" />
+              <div class="errors" *ngIf="skill.get('name')?.invalid && skill.get('name')?.touched">
+                Required
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Level *</label>
+              <select formControlName="level">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+                <option value="expert">Expert</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Years Exp *</label>
+              <input formControlName="yearsExp" type="number" min="0" max="20" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" (click)="addSkill()" class="add-btn">
+        + Add Skill
+      </button>
+
+      <div class="form-status">
+        <span [class]="skillsForm.valid ? 'badge success' : 'badge error'">
+          {{ skillsForm.valid ? 'Valid ✅' : 'Invalid ❌' }}
+        </span>
+        <span class="badge ml">{{ skillsArray.length }} skill(s)</span>
+      </div>
+
+      <button type="submit">Submit Skills</button>
+
+      <pre *ngIf="skillsSubmitted && skillsForm.valid">
+{{ submittedData | json }}
+      </pre>
+    </form>
+
+    <p class="note">
+      FormArray holds a dynamic list of FormGroups. push() adds,
+      removeAt() removes, controls[] iterates. Each row is its own
+      FormGroup with independent validation.
+    </p>
+  </div>
+
+</div>

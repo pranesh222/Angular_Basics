@@ -1,0 +1,189 @@
+<div class="rxjs-container">
+  <h2>⚡ RxJS — Subjects Demo</h2>
+
+  <!-- Subject -->
+  <div class="card">
+    <div class="card-title">Subject — Future values only</div>
+    <div class="form-row">
+      <input [(ngModel)]="subjectInput" placeholder="Emit a value" />
+      <button (click)="emitSubject()" class="ml">Emit</button>
+      <button (click)="lateSubscribeToSubject()" class="ml">Late Subscribe</button>
+    </div>
+    <div class="log-box">
+      <div *ngFor="let log of subjectLog" class="log-item">{{ log }}</div>
+      <div *ngIf="subjectLog.length === 0" class="empty">No values yet</div>
+    </div>
+    <p class="note">Late subscriber gets NO past values — only future ones</p>
+  </div>
+
+  <!-- BehaviorSubject -->
+  <div class="card">
+    <div class="card-title">BehaviorSubject — Replays latest value</div>
+    <div class="form-row">
+      <input [(ngModel)]="behaviorInput" placeholder="Emit a value" />
+      <button (click)="emitBehavior()" class="ml">Emit</button>
+      <button (click)="lateSubscribeToBehavior()" class="ml">Late Subscribe</button>
+    </div>
+    <div class="log-box">
+      <div *ngFor="let log of behaviorLog" class="log-item">{{ log }}</div>
+    </div>
+    <p class="note">Late subscriber gets LATEST value immediately on subscription</p>
+  </div>
+
+  <!-- ReplaySubject -->
+  <div class="card">
+    <div class="card-title">ReplaySubject — Replays last 3 values</div>
+    <div class="form-row">
+      <input [(ngModel)]="replayInput" placeholder="Emit a value" />
+      <button (click)="emitReplay()" class="ml">Emit</button>
+      <button (click)="lateSubscribeToReplay()" class="ml">Late Subscribe</button>
+    </div>
+    <div class="log-box">
+      <div *ngFor="let log of replayLog" class="log-item">{{ log }}</div>
+    </div>
+    <p class="note">Late subscriber gets last 3 buffered values immediately</p>
+  </div>
+
+  <!-- Timer with takeUntil -->
+  <div class="card">
+    <div class="card-title">interval() + takeUntil(destroy$) — Memory leak prevention</div>
+    <button (click)="startTimer()" [disabled]="timerRunning">Start Timer</button>
+    <span class="ml">Timer: <strong>{{ timerValue }}s</strong></span>
+    <p class="note">
+      Timer uses takeUntil(destroy$) — automatically unsubscribes
+      when component is destroyed. No memory leak!
+    </p>
+  </div>
+
+   <hr style="margin: 24px 0;" />
+  <h2>🔀 Flattening Operators</h2>
+
+  <!-- Shared input -->
+  <div class="card">
+    <div class="card-title">Test Value</div>
+    <input [(ngModel)]="operatorInput" placeholder="Enter a label (e.g. 'A', 'B')" />
+    <p class="note">Type a label then click each operator button to see the difference</p>
+  </div>
+
+  <!-- switchMap -->
+  <div class="card">
+    <div class="card-title">switchMap — Cancels previous (search autocomplete)</div>
+    <button (click)="testSwitchMap()">Emit to switchMap</button>
+    <div class="log-box mt">
+      <div *ngFor="let log of switchMapLog" class="log-item">{{ log }}</div>
+      <div *ngIf="switchMapLog.length === 0" class="empty">Click button to test</div>
+    </div>
+    <p class="note">Click rapidly — only the LAST emission completes. Previous ones cancelled.</p>
+  </div>
+
+  <!-- mergeMap -->
+  <div class="card">
+    <div class="card-title">mergeMap — Runs all concurrently (file uploads)</div>
+    <button (click)="testMergeMap()">Emit to mergeMap</button>
+    <div class="log-box mt">
+      <div *ngFor="let log of mergeMapLog" class="log-item">{{ log }}</div>
+      <div *ngIf="mergeMapLog.length === 0" class="empty">Click button to test</div>
+    </div>
+    <p class="note">Click rapidly — ALL requests run simultaneously, all complete.</p>
+  </div>
+
+  <!-- concatMap -->
+  <div class="card">
+    <div class="card-title">concatMap — Queues sequentially (ordered operations)</div>
+    <button (click)="testConcatMap()">Emit to concatMap</button>
+    <div class="log-box mt">
+      <div *ngFor="let log of concatMapLog" class="log-item">{{ log }}</div>
+      <div *ngIf="concatMapLog.length === 0" class="empty">Click button to test</div>
+    </div>
+    <p class="note">Click rapidly — requests queue up, each waits for previous to finish.</p>
+  </div>
+
+  <!-- exhaustMap -->
+  <div class="card">
+    <div class="card-title">exhaustMap — Ignores new while active (login button)</div>
+    <button (click)="testExhaustMap()"
+            [disabled]="exhaustMapActive">
+      {{ exhaustMapActive ? '⏳ Processing...' : 'Emit to exhaustMap' }}
+    </button>
+    <div class="log-box mt">
+      <div *ngFor="let log of exhaustMapLog" class="log-item">{{ log }}</div>
+      <div *ngIf="exhaustMapLog.length === 0" class="empty">Click button to test</div>
+    </div>
+    <p class="note">While active — new emissions are IGNORED. Perfect for login/submit buttons.</p>
+  </div>
+
+  <hr style="margin: 24px 0;" />
+  <h2>🔍 Real-world: Search with debounce + switchMap</h2>
+
+  <div class="card">
+    <div class="card-title">debounceTime + distinctUntilChanged + switchMap</div>
+    <input
+      [ngModel]="searchInput"
+      (ngModelChange)="searchInput = $event; onSearchInput($event)"
+      placeholder="Type to search posts (min 2 chars)..." />
+    <div *ngIf="searchLoading" class="badge warning mt">⏳ Searching...</div>
+    <div *ngFor="let result of searchResults" class="search-result">
+      <strong>#{{ result.id }}</strong> {{ result.title | slice:0:60 }}...
+    </div>
+    <p class="note">
+      debounceTime(400) — waits 400ms after you stop typing<br/>
+      distinctUntilChanged — skips if same value<br/>
+      switchMap — cancels previous HTTP request on new keystroke
+    </p>
+  </div>
+
+  <hr style="margin: 24px 0;" />
+  <h2>🔗 Combination Operators</h2>
+
+  <!-- forkJoin -->
+  <div class="card">
+    <div class="card-title">forkJoin — Wait for ALL to complete (parallel API calls)</div>
+    <button (click)="testForkJoin()">Run 3 parallel API calls</button>
+    <div *ngIf="forkJoinResult && forkJoinResult !== 'Loading...'" class="mt">
+      <p>✅ All 3 completed:</p>
+      <p>Posts fetched: <strong>{{ forkJoinResult.posts }}</strong></p>
+      <p>Users fetched: <strong>{{ forkJoinResult.users }}</strong></p>
+      <p>Todos fetched: <strong>{{ forkJoinResult.todos }}</strong></p>
+    </div>
+    <div *ngIf="forkJoinResult === 'Loading...'" class="badge warning mt">⏳ Loading all...</div>
+    <p class="note">
+      forkJoin fires all 3 requests simultaneously and emits ONE combined
+      result only when ALL complete. Like Promise.all() for Observables.
+    </p>
+  </div>
+
+  <!-- combineLatest -->
+  <div class="card">
+    <div class="card-title">combineLatest — Emits when ANY source changes</div>
+    <div class="form-row">
+      <label>Source 1:
+        <input type="number" [ngModel]="source1$.getValue()"
+               (ngModelChange)="updateSource1(+$event)" style="width:70px" />
+      </label>
+      <label class="ml">Source 2:
+        <input type="number" [ngModel]="source2$.getValue()"
+               (ngModelChange)="updateSource2(+$event)" style="width:70px" />
+      </label>
+    </div>
+    <div class="log-box mt" style="max-height:120px">
+      <div *ngFor="let log of combineLatestLog.slice(-5)" class="log-item">{{ log }}</div>
+    </div>
+    <p class="note">
+      combineLatest emits the LATEST value from ALL sources whenever any ONE changes.
+      Use for combining multiple form controls, filter states, or API responses.
+    </p>
+  </div>
+
+  <!-- Memory leak prevention -->
+  <div class="card">
+    <div class="card-title">Memory Leak Prevention — takeUntil(destroy$)</div>
+    <button (click)="startTimer()" [disabled]="timerRunning">Start Timer</button>
+    <span class="ml">Timer: <strong>{{ timerValue }}s</strong></span>
+    <p class="note">
+      All subscriptions use takeUntil(destroy$) — when ngOnDestroy fires,
+      destroy$.next() completes ALL subscriptions at once automatically.
+    </p>
+  </div>
+
+
+</div>

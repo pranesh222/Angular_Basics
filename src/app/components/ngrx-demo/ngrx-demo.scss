@@ -1,0 +1,44 @@
+.ngrx-container { padding: 0; }
+h2 { color: #1F3864; margin-bottom: 16px; }
+
+.counter-display {
+  font-size: 72px; font-weight: bold; text-align: center;
+  padding: 20px; border-radius: 8px; background: #f8f9fa;
+  color: #333; transition: all 0.3s;
+  &.positive { color: #1E8449; background: #E2EFDA; }
+  &.negative { color: #C0392B; background: #FADBD8; }
+}
+
+.counter-actions {
+  display: flex; justify-content: center; gap: 16px; margin-top: 16px;
+  button { font-size: 24px; width: 50px; height: 50px;
+           border-radius: 50%; font-weight: bold; }
+}
+
+.derived { display: flex; align-items: center; }
+.add-form { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+  input { flex: 1; padding: 8px; border: 1px solid #dce3ed;
+          border-radius: 4px; font-size: 13px; min-width: 150px; } }
+
+.post-row { display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid #eee;
+  &:last-child { border-bottom: none; } }
+.post-info { display: flex; align-items: center; gap: 10px; flex: 1; }
+.post-id    { background: #EBF3FB; color: #2E75B6; padding: 2px 8px;
+              border-radius: 10px; font-size: 11px; font-weight: bold; }
+.post-title { font-size: 13px; }
+
+.flow-diagram {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 8px; justify-content: center; padding: 16px 0;
+}
+.flow-step {
+  text-align: center; padding: 12px;
+  background: #EBF3FB; border-radius: 8px; min-width: 90px;
+}
+.step-icon  { font-size: 24px; }
+.step-label { font-weight: bold; font-size: 12px; color: #1F3864; margin-top: 4px; }
+.step-desc  { font-size: 11px; color: #666; margin-top: 2px; }
+.flow-arrow { font-size: 20px; color: #2E75B6; font-weight: bold; }
+.mt { margin-top: 12px; }
+.mb { margin-bottom: 12px; }

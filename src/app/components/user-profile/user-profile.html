@@ -1,0 +1,128 @@
+<!-- ═══════════════════════════════════════════════════════
+     1. INTERPOLATION  {{ }}
+     Reads a value from the component class and renders
+     it as plain text in the DOM. One-way: class → template.
+     ═══════════════════════════════════════════════════════ -->
+<section>
+  <h3>1. Interpolation</h3>
+  <p>Name: {{ name }}</p>
+  <p>Role: {{ role }}</p>
+  <p>Click count: {{ clickCount }}</p>
+  <!-- You can also write expressions inside {{ }} -->
+  <p>Upper name: {{ name.toUpperCase() }}</p>
+</section>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════
+     2. PROPERTY BINDING  [domProperty]="classValue"
+     Binds a component value to a DOM *property* (not attribute).
+     One-way: class → template.
+     ═══════════════════════════════════════════════════════ -->
+<section>
+  <h3>2. Property Binding</h3>
+
+  <!-- [src] binds to the DOM image.src property -->
+
+  <!-- [disabled] binds to button.disabled DOM property -->
+  <button [disabled]="isDisabled">I am disabled</button>
+
+  <!-- [value] binds to input.value DOM property -->
+  <input [value]="name" />
+
+  <!-- 
+    ATTRIBUTE BINDING — use [attr.x] when no DOM property exists.
+    colspan and aria-* live only as HTML attributes, not DOM properties.
+    [colspan]="2" silently fails — [attr.colspan]="2" is correct.
+  -->
+  <table border="1">
+  <tbody>
+    <tr>
+      <td [attr.colspan]="2">I span 2 columns via attr.colspan</td>
+    </tr>
+    <tr>
+      <td>A</td><td>B</td>
+    </tr>
+  </tbody>
+</table>
+
+  <button [attr.aria-label]="'Close dialog'">X</button>
+</section>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════
+     3. EVENT BINDING  (domEvent)="classMethod()"
+     Listens to a DOM event and calls a component method.
+     One-way: template → class.
+     ═══════════════════════════════════════════════════════ -->
+<section>
+  <h3>3. Event Binding</h3>
+
+  <!-- Basic click event -->
+  <button (click)="onButtonClick()">Click me</button>
+  <p>Clicked: {{ clickCount }} times</p>
+
+  <!-- 
+    $event = the native DOM event object.
+    For keyup it is a KeyboardEvent — so event.key gives the key pressed.
+  -->
+  <input (keyup)="onKeyUp($event)" placeholder="Press any key" />
+  <p>Last key pressed: {{ lastKey }}</p>
+
+  <!-- 
+    Reading input.value from the event target.
+    (event.target as HTMLInputElement).value needed because
+    TypeScript doesn't know event.target is an input element.
+  -->
+  <input (input)="onInputChange($event)" placeholder="Type here" />
+  <p>Input value: {{ inputValue }}</p>
+
+  <!-- 
+    Angular shorthand: keyup.enter fires ONLY when Enter is pressed.
+    Saves you writing if(event.key === 'Enter') in the method.
+  -->
+  <input (keyup.enter)="onButtonClick()" placeholder="Press Enter to count" />
+</section>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════
+     4. TWO-WAY BINDING  [(ngModel)]="classProperty"
+     Syncs class property and input value in both directions.
+     Requires FormsModule imported in the component.
+     The [( )] syntax is called "banana in a box".
+     ═══════════════════════════════════════════════════════ -->
+<section>
+  <h3>4. Two-Way Binding</h3>
+
+  <!-- 
+    [(ngModel)] is syntactic sugar for:
+    [ngModel]="searchText" (input)="searchText = $event"
+  -->
+  <input [(ngModel)]="searchText" placeholder="Type something..." />
+  <p>You typed: {{ searchText }}</p>
+</section>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════
+     5. TEMPLATE REFERENCE VARIABLES  #myVar
+     Creates a reference to a DOM element, usable anywhere
+     within the same template — no TypeScript needed.
+     ═══════════════════════════════════════════════════════ -->
+<section>
+  <h3>5. Template Reference Variables</h3>
+
+  <!-- 
+    #inputRef points to the native <input> DOM element.
+    inputRef.value reads its current value directly in the template.
+    No @ViewChild needed for simple read-in-template scenarios.
+  -->
+  <input #inputRef placeholder="Type something" />
+  <p>Live value via #ref: {{ inputRef.value }}</p>
+
+  <!-- Passing the ref's value to a component method -->
+  <input #nameInput placeholder="Enter your name" />
+  <button (click)="greetUser(nameInput.value)">Greet</button>
+</section>

@@ -1,0 +1,10 @@
+<!-- <input type="text" [formControl]="name" placeholder="Enter your name" />{{ name.value }} -->
+
+<!-- Form Group -->
+<form [formGroup]="nameForm" (ngSubmit)="onSubmit()">
+  <input formControlName="name" placeholder="Enter your name" />
+  <button (click)="updateName()">Set Name to "Nancy"</button>
+
+    <button type="submit" >Submit</button>
+
+</form>

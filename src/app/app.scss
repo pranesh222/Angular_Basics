@@ -1,0 +1,120 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+
+.app-container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+.app-header {
+  background: #1F3864; color: white;
+  padding: 20px 24px; border-radius: 8px; margin-bottom: 20px;
+  h1 { font-size: 22px; } p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+}
+
+// Tabs
+.tab-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab-btn {
+  padding: 10px 18px; border: 2px solid #2E75B6;
+  background: white; color: #2E75B6; border-radius: 6px;
+  cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s;
+  &:hover { background: #EBF3FB; }
+  &.active { background: #2E75B6; color: white; }
+}
+
+// Tab content
+.tab-content { min-height: 400px; }
+.tab-content h2 { color: #1F3864; margin-bottom: 16px; font-size: 20px; }
+
+// Cards
+.card {
+  background: white; border: 1px solid #dce3ed;
+  border-radius: 8px; padding: 16px; margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.card-title {
+  font-weight: 700; color: #2E75B6; font-size: 14px;
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 2px solid #EBF3FB;
+}
+
+// Utilities
+.ml  { margin-left: 10px; }
+.mt  { margin-top: 12px; }
+.mb  { margin-bottom: 12px; }
+.note {
+  font-size: 12px; color: #666; background: #f8f9fa;
+  padding: 8px; border-radius: 4px; margin-top: 10px;
+  border-left: 3px solid #2E75B6;
+}
+.avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #2E75B6; }
+.controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+// Badges
+.badge {
+  display: inline-block; padding: 4px 10px;
+  border-radius: 4px; font-size: 13px; background: #EBF3FB; color: #1F3864;
+  &.success { background: #d4edda; color: #155724; }
+  &.warning { background: #fff3cd; color: #856404; }
+  &.error   { background: #f8d7da; color: #721c24; }
+}
+
+// ngClass demo
+.active-box   { border: 2px solid green; padding: 8px; border-radius: 4px; display:inline-block; }
+.inactive-box { border: 2px dashed grey; padding: 8px; border-radius: 4px; display:inline-block; }
+.admin-badge  { background: gold; padding: 2px 8px; border-radius: 4px; margin-left: 6px; font-size: 12px; }
+
+// Alert styles
+.alert { padding: 10px; margin: 6px 0; border-radius: 4px; }
+.alert-success { background: #d4edda; color: #155724; }
+.alert-warning { background: #fff3cd; color: #856404; }
+.alert-error   { background: #f8d7da; color: #721c24; }
+
+// Notification styles
+.notification {
+  padding: 10px 14px; margin: 4px 0; border-radius: 4px;
+  border-left: 4px solid grey; display: flex;
+  justify-content: space-between; align-items: center;
+  &.success { border-left-color: green;  background: #f0fff0; }
+  &.warning { border-left-color: orange; background: #fffbf0; }
+  &.error   { border-left-color: red;    background: #fff0f0; }
+  &.read    { opacity: 0.5; }
+  &.unread  { font-weight: bold; }
+}
+
+// Table
+servicesTab{
+    .even-row { background: #f0f7ff; }
+pre { background: #f4f4f4; padding: 8px; border-radius: 4px; font-size: 12px; margin-top: 6px; }
+
+
+// services
+.stats { display: flex; gap: 16px; margin-top: 8px;
+  span { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 13px; } }
+
+.product-row { display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid #eee;
+  &:last-child { border-bottom: none; } }
+
+.product-actions { display: flex; align-items: center; gap: 10px; }
+
+.category-tag { background: #EBF3FB; color: #2E75B6; font-size: 11px;
+  padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+
+.form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  input, select { padding: 8px; border: 1px solid #dce3ed; border-radius: 4px; font-size: 13px; } }
+
+button.danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+}
+
+.nav-bar {
+  display: flex; gap: 12px; align-items: center;
+  background: white; padding: 12px 16px;
+  border-radius: 8px; margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+
+  a {
+    text-decoration: none; color: #2E75B6;
+    font-size: 13px; font-weight: 600;
+    padding: 6px 12px; border-radius: 4px;
+    transition: all 0.2s;
+    &:hover { background: #EBF3FB; }
+    &.active { background: #2E75B6; color: white; }
+  }
+}

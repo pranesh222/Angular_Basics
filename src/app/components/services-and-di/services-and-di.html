@@ -1,0 +1,62 @@
+<div class="app-container">
+
+  <div class="app-header">
+    <h1>🅰 Angular — Day 3: Services & DI</h1>
+    <div class="stats">
+      <span>Total: {{ totalProducts() }}</span>
+      <span>In Stock: {{ inStockCount() }}</span>
+    </div>
+  </div>
+
+  <!-- Category filter -->
+  <div class="tab-bar">
+    <button
+      [class.active]="selectedCategory === 'All'"
+      (click)="setCategory('All')">All
+    </button>
+    <button
+      *ngFor="let cat of categories()"
+      [class.active]="selectedCategory === cat"
+      (click)="setCategory(cat)">
+      {{ cat }}
+    </button>
+  </div>
+
+  <!-- Product list -->
+  <div class="card">
+    <div class="card-title">Products</div>
+    <div *ngFor="let p of filteredProducts; trackBy: trackByProductId"
+         class="product-row">
+      <div>
+        <strong>{{ p.name }}</strong>
+        <span class="category-tag">{{ p.category }}</span>
+      </div>
+      <div class="product-actions">
+        <strong>${{ p.price }}</strong>
+        <span [class]="p.inStock ? 'badge success' : 'badge error'">
+          {{ p.inStock ? 'In Stock' : 'Out of Stock' }}
+        </span>
+        <button (click)="toggleStock(p.id)">Toggle Stock</button>
+        <button class="danger" (click)="removeProduct(p.id)">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add product -->
+  <div class="card">
+    <div class="card-title">Add New Product</div>
+    <div class="form-row">
+      <input [(ngModel)]="newProduct.name"
+             placeholder="Product name" />
+      <input type="number" [(ngModel)]="newProduct.price"
+             placeholder="Price" />
+      <select [(ngModel)]="newProduct.category">
+        <option *ngFor="let cat of categories()" [value]="cat">
+          {{ cat }}
+        </option>
+      </select>
+      <button (click)="addProduct()">Add Product</button>
+    </div>
+  </div>
+
+</div>
