@@ -1,0 +1,1 @@
+import{e}from"./chunk-QEXGXZF2.js";import{ma as r}from"./chunk-W776P4UC.js";var t=!1,c=(a,o)=>{let n=r(e);return t?!0:(n.navigate([""],{queryParams:{returnUrl:o.url}}),!1)},g=()=>{t=!t},l=()=>t;export{c as a,g as b,l as c};
