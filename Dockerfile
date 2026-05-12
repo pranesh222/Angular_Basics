@@ -11,7 +11,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build:prod
+RUN npm run build:docker
 
 # -----------------------------
 # Stage 2: Serve Using Nginx

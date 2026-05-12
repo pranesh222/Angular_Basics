@@ -10,7 +10,9 @@
     "test": "ng test",
     "test:headless": "ng test --watch=false --browsers=ChromeHeadless",
     "deploy:gh": "ng deploy --base-href=/Angular_Basics/ --cname=false",
-    "serve:ssr:my-angular-project": "node dist/my-angular-project/server/server.mjs"
+    "serve:ssr:my-angular-project": "node dist/my-angular-project/server/server.mjs",
+    "build:github": "ng build --configuration production --base-href=/Angular_Basics/",
+    "build:docker": "ng build --configuration production"
   },
   "prettier": {
     "printWidth": 100,

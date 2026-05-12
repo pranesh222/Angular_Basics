@@ -43,7 +43,7 @@ jobs:
         run: npm run test:headless
 
       - name: Build Angular App (Production)
-        run: npm run build -- --configuration production --base-href "/Angular_Basics/"
+        run: npm run build:github
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
