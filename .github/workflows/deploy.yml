@@ -68,9 +68,16 @@ jobs:
           name: angular-build
           path: dist/angular
 
+      - name: Prepare deployment folder
+        run: |
+          mkdir -p deploy/Angular_Basics
+          cp -r dist/angular/browser/* deploy/Angular_Basics/
+          ls -la deploy/
+          ls -la deploy/Angular_Basics/ | head -20
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/angular/browser
+          publish_dir: ./deploy
           cname: false
