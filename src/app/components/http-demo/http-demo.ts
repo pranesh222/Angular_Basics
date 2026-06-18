@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, TemplateRef, Input } from '@angular/core';
+import { Component, inject, signal, OnInit, TemplateRef, Input, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PostsService, Post, CreatePost } from '../../services/posts';
@@ -15,6 +15,7 @@ export class HttpDemoComponent implements OnInit {
   private postsService = inject(PostsService);
   private http = inject(HttpClient);
   @Input() rowTemplate!: TemplateRef<any>;
+  signal_test : WritableSignal<boolean> = signal(false)
 
 
   // ── State signals ──────────────────────────────────────────────
