@@ -43,6 +43,7 @@ export class FormsDemoComponent implements OnInit, OnDestroy {
   private fb      = inject(FormBuilder);
   private http    = inject(HttpClient);
   private destroy$ = new Subject<void>();
+  selector_data : any = true
 
   // ── Form 1: Basic Reactive Form ───────────────────────────────
   profileForm!: FormGroup;
